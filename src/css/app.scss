@@ -1,1 +1,10 @@
-// app global css
+body {
+  background: #0e0e0e;
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+}
