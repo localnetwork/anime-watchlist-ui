@@ -1,96 +1,152 @@
 <template>
   <q-header elevated class="app-header">
     <q-toolbar class="container">
-      <!-- Menu -->
-      <q-btn flat class="app-toggle" dense round icon="menu" aria-label="Menu">
-        <q-menu class="app-menu" :offset="[0, 10]" @hide="activeSubmenu = null">
-          <div class="menu-container">
-            <!-- Main menu -->
-            <div class="menu-list">
-              <!-- Home -->
-              <a href="#" class="menu-item">
-                <q-icon name="home" />
-                <span>Home</span>
-              </a>
+      <!-- Left section -->
+      <div class="header-left">
+        <!-- Menu -->
+        <q-btn flat dense round icon="menu" aria-label="Menu" class="app-toggle">
+          <q-menu class="app-menu" :offset="[0, 10]" @hide="activeSubmenu = null">
+            <div class="menu-container">
+              <!-- Main menu -->
+              <div class="menu-list">
+                <a href="/" class="menu-item">
+                  <q-icon name="home" />
+                  <span>Home</span>
+                </a>
 
-              <!-- Genres -->
-              <div class="menu-item" @mouseenter="activeSubmenu = 'genres'">
-                <q-icon name="category" />
-                <span>Genres</span>
-                <q-icon name="chevron_right" class="menu-arrow" />
+                <div class="menu-item" @mouseenter="activeSubmenu = 'genres'">
+                  <q-icon name="category" />
+                  <span>Genres</span>
+                  <q-icon name="chevron_right" class="menu-arrow" />
+                </div>
+
+                <div class="menu-item" @mouseenter="activeSubmenu = 'types'">
+                  <q-icon name="movie" />
+                  <span>Types</span>
+                  <q-icon name="chevron_right" class="menu-arrow" />
+                </div>
+
+                <a href="#" class="menu-item">
+                  <q-icon name="event" />
+                  <span>Upcoming</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                  <q-icon name="play_circle" />
+                  <span>Ongoing</span>
+                </a>
               </div>
 
-              <!-- Types -->
-              <div class="menu-item" @mouseenter="activeSubmenu = 'types'">
-                <q-icon name="movie" />
-                <span>Types</span>
-                <q-icon name="chevron_right" class="menu-arrow" />
+              <!-- Nested menu -->
+              <div v-if="activeSubmenu" class="submenu">
+                <template v-if="activeSubmenu === 'genres'">
+                  <a href="#" class="submenu-item">Action</a>
+                  <a href="#" class="submenu-item">Adventure</a>
+                  <a href="#" class="submenu-item">Comedy</a>
+                  <a href="#" class="submenu-item">Drama</a>
+                  <a href="#" class="submenu-item">Fantasy</a>
+                  <a href="#" class="submenu-item">Romance</a>
+                  <a href="#" class="submenu-item">Sci-Fi</a>
+                  <a href="#" class="submenu-item">Thriller</a>
+                </template>
+
+                <template v-if="activeSubmenu === 'types'">
+                  <a href="#" class="submenu-item">TV</a>
+                  <a href="#" class="submenu-item">Movie</a>
+                  <a href="#" class="submenu-item">OVA</a>
+                  <a href="#" class="submenu-item">ONA</a>
+                  <a href="#" class="submenu-item">Special</a>
+                </template>
               </div>
-
-              <!-- Upcoming -->
-              <a href="#" class="menu-item">
-                <q-icon name="event" />
-                <span>Upcoming</span>
-              </a>
-
-              <!-- Ongoing -->
-              <a href="#" class="menu-item">
-                <q-icon name="play_circle" />
-                <span>Ongoing</span>
-              </a>
             </div>
+          </q-menu>
+        </q-btn>
 
-            <!-- Nested menu -->
-            <div
-              v-if="activeSubmenu"
-              class="submenu"
-              @mouseenter="submenuHovered = true"
-              @mouseleave="submenuHovered = false"
-            >
-              <!-- Genres -->
-              <template v-if="activeSubmenu === 'genres'">
-                <a href="#" class="submenu-item">Action</a>
-                <a href="#" class="submenu-item">Adventure</a>
-                <a href="#" class="submenu-item">Comedy</a>
-                <a href="#" class="submenu-item">Drama</a>
-                <a href="#" class="submenu-item">Fantasy</a>
-                <a href="#" class="submenu-item">Romance</a>
-                <a href="#" class="submenu-item">Sci-Fi</a>
-                <a href="#" class="submenu-item">Thriller</a>
-              </template>
+        <!-- Logo -->
+        <div class="app-logo">
+          <router-link to="/">
+            <AppLogo />
+          </router-link>
+        </div>
 
-              <!-- Types -->
-              <template v-if="activeSubmenu === 'types'">
-                <a href="#" class="submenu-item">TV</a>
-                <a href="#" class="submenu-item">Movie</a>
-                <a href="#" class="submenu-item">OVA</a>
-                <a href="#" class="submenu-item">ONA</a>
-                <a href="#" class="submenu-item">Special</a>
-              </template>
-            </div>
-          </div>
-        </q-menu>
-      </q-btn>
-
-      <!-- Logo -->
-      <div class="app-logo">
-        <AppLogo />
+        <!-- Search -->
+        <div class="search-wrapper">
+          <q-input
+            v-model="search"
+            class="search-input"
+            borderless
+            dense
+            placeholder="Search anime..."
+            type="text"
+          >
+            <template #prepend>
+              <q-icon name="search" class="search-icon" />
+            </template>
+          </q-input>
+        </div>
       </div>
 
-      <!-- Search -->
-      <div class="search-wrapper">
-        <q-input
-          v-model="search"
-          class="search-input"
-          borderless
-          dense
-          placeholder="Search anime..."
-          type="text"
-        >
-          <template #prepend>
-            <q-icon name="search" class="search-icon" />
-          </template>
-        </q-input>
+      <!-- Right section -->
+      <div class="header-right">
+        <q-btn
+          v-if="!authStore.isAuthenticated"
+          unelevated
+          no-caps
+          label="Sign In"
+          class="sign-in-btn"
+          @click="uiStore.openAuthDialog('login')"
+        />
+
+        <q-btn v-else flat round dense icon="account_circle" class="user-toggle">
+          <q-menu class="app-menu user-menu" :offset="[0, 10]" anchor="bottom right" self="top right">
+            <div class="menu-list">
+              <div class="user-info">
+                <div class="user-name">{{ authStore.user?.name || authStore.user?.email }}</div>
+              </div>
+
+              <router-link
+                v-if="authStore.hasPermission(genrePermission)"
+                to="/manage/genres"
+                class="menu-item"
+              >
+                <q-icon name="category" />
+                <span>Manage Genres</span>
+              </router-link>
+
+              <router-link
+                v-if="authStore.hasPermission(typePermission)"
+                to="/manage/types"
+                class="menu-item"
+              >
+                <q-icon name="movie" />
+                <span>Manage Types</span>
+              </router-link>
+
+              <router-link
+                v-if="authStore.hasAnyPermission(animePermissions)"
+                to="/manage/animes"
+                class="menu-item"
+              >
+                <q-icon name="theaters" />
+                <span>Manage Animes</span>
+              </router-link>
+
+              <router-link
+                v-if="authStore.hasPermission(ratingPermission)"
+                to="/manage/ratings"
+                class="menu-item"
+              >
+                <q-icon name="star" />
+                <span>Manage Rating</span>
+              </router-link>
+
+              <div class="menu-item" @click="onLogout">
+                <q-icon name="logout" />
+                <span>Log Out</span>
+              </div>
+            </div>
+          </q-menu>
+        </q-btn>
       </div>
     </q-toolbar>
   </q-header>
@@ -98,10 +154,27 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AppLogo from '../icons/AppLogo.vue'
+import { useAuthStore } from '@/stores/auth-store'
+import { useUiStore } from '@/stores/ui-store'
 
 const search = ref('')
 const activeSubmenu = ref(null)
+
+const router = useRouter()
+const authStore = useAuthStore()
+const uiStore = useUiStore()
+
+const genrePermission = 'genre.manage'
+const typePermission = 'type.manage'
+const animePermissions = ['anime.create', 'anime.update', 'anime.delete']
+const ratingPermission = 'anime.update'
+
+function onLogout() {
+  authStore.logout()
+  router.push('/')
+}
 </script>
 
 <style scoped>
@@ -115,13 +188,29 @@ const activeSubmenu = ref(null)
   min-height: 50px;
 }
 
-.app-menu,
-.q-menu {
-  background: #242424 !important;
+/* Header */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Menu button */
+
 .app-toggle {
   color: #aaaaaa;
   margin-right: 16px;
+}
+
+.app-toggle:hover {
+  color: #ffffff;
 }
 
 /* Logo */
@@ -142,7 +231,7 @@ const activeSubmenu = ref(null)
 .search-input {
   width: 100%;
   height: 40px;
-  color: #484848;
+  color: #ffffff;
   background-color: #0e0e0e;
   border-radius: 5px;
 }
@@ -154,7 +243,7 @@ const activeSubmenu = ref(null)
 }
 
 .search-input :deep(.q-field__native) {
-  color: #484848;
+  color: #ffffff;
   padding-left: 5px;
 }
 
@@ -168,7 +257,67 @@ const activeSubmenu = ref(null)
   font-size: 20px;
 }
 
+/* Sign In */
+
+.sign-in-btn {
+  min-width: 100px;
+  height: 40px;
+  padding: 0 20px;
+
+  border-radius: 5px;
+
+  background-color: #7c4dff;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sign-in-btn:hover {
+  background-color: #8f67ff;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 18px rgba(124, 77, 255, 0.3);
+}
+
+/* User menu */
+
+.user-toggle {
+  color: #d0d0d0;
+  font-size: 30px;
+}
+
+.user-toggle:hover {
+  color: #ffffff;
+}
+
+.user-menu .menu-list {
+  width: 220px;
+}
+
+.user-info {
+  padding: 10px 14px;
+  border-bottom: 1px solid #333333;
+  color: #ffffff;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Main menu */
+
+.app-menu {
+  background: #242424 !important;
+}
 
 .menu-container {
   display: flex;
@@ -178,12 +327,11 @@ const activeSubmenu = ref(null)
 .menu-list {
   width: 190px;
   padding: 6px 0;
+
   background-color: #242424;
   border-radius: 6px;
   overflow: hidden;
 }
-
-/* Parent menu item */
 
 .menu-item {
   display: flex;
@@ -245,5 +393,23 @@ const activeSubmenu = ref(null)
 .submenu-item:hover {
   background-color: #333333;
   color: #ffffff;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .search-wrapper {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .app-logo {
+    margin-right: 15px;
+  }
+
+  .sign-in-btn {
+    min-width: 85px;
+    padding: 0 15px;
+  }
 }
 </style>
