@@ -1,6 +1,12 @@
 body {
   background: #0e0e0e;
 }
+
+.text-negative,
+.q-field--error .q-field__bottom,
+.q-field--focused .q-field__label {
+  color: #7c4dff !important;
+}
 @media (min-width: 1200px) {
   .container {
     max-width: 1440px;
