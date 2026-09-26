@@ -163,15 +163,19 @@
       </div>
     </div>
 
-    <div v-if="meta.totalPages > 1" class="manage-pagination">
-      <q-pagination
-        v-model="filters.page"
-        :max="meta.totalPages"
-        direction-links
-        boundary-links
-        color="primary"
-        dark
-        @update:model-value="fetchAnime"
+    <div v-if="!loading && animeList.length" class="manage-pagination">
+      <span class="pagination-count">
+        Showing {{ animeList.length }} of {{ meta.total }}
+      </span>
+      <q-btn
+        v-if="hasMore"
+        no-caps
+        unelevated
+        label="Load More"
+        icon="expand_more"
+        class="load-more-btn"
+        :loading="loadingMore"
+        @click="loadMore"
       />
     </div>
 
@@ -204,6 +208,7 @@ const $q = useQuasar()
 
 const animeList = ref([])
 const loading = ref(false)
+const loadingMore = ref(false)
 const dialogOpen = ref(false)
 const editingAnime = ref(null)
 const episodesDialogOpen = ref(false)
@@ -212,7 +217,9 @@ const episodesAnime = ref(null)
 const genreOptions = ref([])
 const typeOptions = ref([])
 
-const meta = reactive({ page: 1, limit: 20, total: 0, totalPages: 1 })
+const INITIAL_PAGE_SIZE = 12
+
+const meta = reactive({ page: 1, limit: INITIAL_PAGE_SIZE, total: 0, totalPages: 1 })
 
 const filters = reactive({
   search: '',
@@ -258,6 +265,8 @@ const hasActiveFilters = computed(
     Boolean(filters.genreId),
 )
 
+const hasMore = computed(() => animeList.value.length < meta.total)
+
 function formatStatus(status) {
   if (!status) return 'Unknown Status'
   return status
@@ -267,8 +276,13 @@ function formatStatus(status) {
     .join(' ')
 }
 
-async function fetchAnime() {
-  loading.value = true
+async function fetchAnime({ append = false } = {}) {
+  if (append) {
+    loadingMore.value = true
+  } else {
+    loading.value = true
+  }
+
   try {
     const { data } = await api.get('/watchlist/manage/animes', {
       params: {
@@ -280,14 +294,21 @@ async function fetchAnime() {
         sortBy: filters.sortBy,
         sortDir: filters.sortDir,
         page: filters.page,
-        limit: meta.limit,
+        limit: INITIAL_PAGE_SIZE,
       },
     })
-    animeList.value = data.data
+    animeList.value = append ? [...animeList.value, ...data.data] : data.data
     Object.assign(meta, data.meta)
   } finally {
     loading.value = false
+    loadingMore.value = false
   }
+}
+
+function loadMore() {
+  if (loadingMore.value || !hasMore.value) return
+  filters.page += 1
+  fetchAnime({ append: true })
 }
 
 async function loadFilterOptions() {
@@ -331,7 +352,7 @@ function openEpisodesDialog(anime) {
 }
 
 function onSaved() {
-  fetchAnime()
+  onFilterChange()
 }
 
 function confirmDelete(anime) {
@@ -343,7 +364,7 @@ function confirmDelete(anime) {
     dark: true,
   }).onOk(async () => {
     await api.delete(`/watchlist/${anime.id}`)
-    fetchAnime()
+    onFilterChange()
   })
 }
 
@@ -498,7 +519,26 @@ onMounted(() => {
 
 .manage-pagination {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   margin-top: 24px;
+  padding: 20px;
+  background-color: #1c1c1c;
+  border-radius: 10px;
+}
+
+.pagination-count {
+  color: #9a9a9a;
+  font-size: 13px;
+}
+
+.load-more-btn {
+  background-color: #7c4dff;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0 24px;
+  height: 40px;
+  border-radius: 6px;
 }
 </style>
