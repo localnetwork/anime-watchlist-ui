@@ -1,0 +1,207 @@
+[
+  {
+    "id": "a4d7891f-a849-4f33-9489-0d81029496e6",
+    "title": "Member Seeded Anime 001",
+    "description": "Sample anime owned by seeded member user.",
+    "coverImageUrl": "https://pub-demo-anime.r2.dev/covers/member-seeded-anime-001.jpg",
+    "slug": "member-seeded-anime-001",
+    "airedFrom": null,
+    "airedTo": null,
+    "airedStatus": "AIRING",
+    "viewCount": 0,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:34.136Z",
+    "updatedAt": "2026-09-26T17:30:34.136Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [{ "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" }]
+  },
+  {
+    "id": "2e8c73d9-d108-41e9-b94d-42e250e761f7",
+    "title": "A Lull in the Sea",
+    "description": "Since long ago, human civilization had lived on the ocean floor. However, there were many humans who wanted to live above the surface and they moved to land creating a fundamental separation between the two. After their school closes down, four 14-year-old middle school students from the sea village, Shioshishio, have to attend Mihama Middle School on the surface. What follows is their struggles to adjust to a new environment and the relationships between the sea and land people, while dealing with their own newfound feelings that have just started appearing with the end of their childhood.\n\n\n\n(Source: Wikipedia)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/16067-11a9dfaa-7f31-4045-8ac6-c9e1046502cc.png",
+    "slug": "a-lull-in-the-sea-16067",
+    "airedFrom": "2026-09-26T17:30:31.671Z",
+    "airedTo": "2026-09-26T17:30:31.671Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 1,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:33.404Z",
+    "updatedAt": "2026-09-26T17:30:33.404Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "b1a6ac2d-b013-4ca6-b81a-7c9443a78ae6", "name": "Drama" },
+      { "id": "fed5050b-67a6-4566-bd44-af7928669b99", "name": "Fantasy" },
+      { "id": "e33dbc6c-cde8-4f33-8d93-a1023e60eabf", "name": "Romance" }
+    ]
+  },
+  {
+    "id": "7b01a61d-24a2-4b5a-8b32-f9044f81ff05",
+    "title": "That Time I Got Reincarnated as a Slime Season 4",
+    "description": "Demon Lord Rimuru's dream of creating an alliance between humans and monsters takes a step closer to being realized. As Tempest continues to prosper, Granville Rozzo and his granddaughter, Maribel Rozzo, clash with Demon Lord Rimuru over their plan to protect mankind by ruling over them. Meanwhile, in El Dorado, Demon Lord Leon works toward goals of his own. The awakening of a new Hero draws near!\n\n\n\n(Source: Crunchyroll News)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/182205-6c50c066-34e1-4387-845d-4a59535569f9.jpg",
+    "slug": "that-time-i-got-reincarnated-as-a-slime-season-4-182205",
+    "airedFrom": "2026-09-26T17:30:30.595Z",
+    "airedTo": "2026-09-26T17:30:30.595Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 2,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:31.188Z",
+    "updatedAt": "2026-09-26T17:30:31.188Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "ada2bf3f-3741-4c26-85bc-8bd5ec3d3b35", "name": "Adventure" },
+      { "id": "1e940bea-99fa-4558-860c-95622e100587", "name": "Comedy" }
+    ]
+  },
+  {
+    "id": "fdb7f37f-3318-4874-81d8-0b743ddddcd1",
+    "title": "The Misfit of Demon King Academy Ⅱ: History's Strongest Demon King Reincarnates and Goes to School with His Descendants",
+    "description": "As peace returns to the demon realm, Anos Voldigoad wishes nothing more than to put his reputation as the Demon King of Tyranny to rest and go back to being a misfit at the prestigious Demon King Academy. Unfortunately, any tranquility is fleeting: sinister demons, kings, and deities plot Anos's demise from the shadows.\n\n\n\nRumors spread about the \"Child of God,\" a being whose power may rival that of Anos. To uncover the truth and eliminate the potential threat, Anos must journey deep into the land of spirits. However, the spirit world is shrouded in mystery, and it may only be entered after undergoing a series of difficult trials.\n\n\n\nWith unrivaled power and confidence, Anos braces himself to defeat various formidable enemies with grandiose titles. But he—with the assistance of his trusted allies—will barely have to break a sweat as the true Demon King of Tyranny.\n\n\n\n(Source: MAL Rewrite)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/130588-76066137-ccfe-48ce-8a4c-634ea2315a18.jpg",
+    "slug": "the-misfit-of-demon-king-academy-history-s-strongest-demon-king-reincarnates-and-130588",
+    "airedFrom": "2026-09-26T17:30:29.044Z",
+    "airedTo": "2026-09-26T17:30:29.044Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 3,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:29.987Z",
+    "updatedAt": "2026-09-26T17:30:29.987Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "fed5050b-67a6-4566-bd44-af7928669b99", "name": "Fantasy" }
+    ]
+  },
+  {
+    "id": "1cd38cce-7bd9-481b-b573-cb5412ad552e",
+    "title": "Myriad Colors Phantom World",
+    "description": "The story takes place in the near future, in a world born of human imagination. What humans would call ghosts or monsters appear, and they come to be called \"phantoms\". The main character, Haruhiko Ichijo, is a first year at Hosea Academy along with his upperclassman Mai Kawakami, who fights phantoms with the ability \"Spirit of Five Elements\", Izumi Reina, who has the ability \"Phantom Eater\", and Koito Minase, who fights phantoms in solitude. They experience the ups and downs of high school life before a certain incident leads them to the truth of this world.\n\n\n\n(Source: Anime News Network)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/21306-8ed400ef-6146-4366-b99e-5439894d84dc.png",
+    "slug": "myriad-colors-phantom-world-21306",
+    "airedFrom": "2026-09-26T17:30:26.724Z",
+    "airedTo": "2026-09-26T17:30:26.724Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 4,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:28.511Z",
+    "updatedAt": "2026-09-26T17:30:28.511Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "fa7c4393-fbed-4084-afa0-de24d0d2ab55", "name": "Ecchi" },
+      { "id": "c6b35219-9688-4c33-83de-4eaec9d7bf08", "name": "Slice of Life" }
+    ]
+  },
+  {
+    "id": "a015b654-f40d-40d6-b86c-19fd89675306",
+    "title": "PSYCHO-PASS 2",
+    "description": "Taking place one-and-a-half years after Psycho-Pass, having learned the true nature of the Sibyl System, Akane Tsunemori chose to obey the system, believing in both humanity and the legal order. She's part of a new police section and spends her everyday life facing down criminals. Unbeknownst to Akane, however, a monster who will shake the system to its core is about to appear before her.\n\n\n\n(Source: Anime News Network)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/20513-ef1bbebd-bcf2-41c2-9fe3-b73525926def.jpg",
+    "slug": "psycho-pass-2-20513",
+    "airedFrom": "2026-09-26T17:30:25.768Z",
+    "airedTo": "2026-09-26T17:30:25.768Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 5,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:26.246Z",
+    "updatedAt": "2026-09-26T17:30:26.246Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "3eabea9e-4eac-4288-94e8-9821ff434710", "name": "Psychological" },
+      { "id": "bb9fcf35-e2e6-4c5f-afaa-618a2b205c12", "name": "Sci-Fi" }
+    ]
+  },
+  {
+    "id": "eadcc443-d3ba-4ee3-b280-a1c754373f27",
+    "title": "Megalobox",
+    "description": "\"To be quiet and do as you're told, that's the cowardly choice.\" These are the words of Junk Dog, an underground fighter of Megalo Box, an evolution of boxing that utilizes mechanical limbs known as Gear to enhance the speed and power of its users. Despite the young man's brimming potential as a boxer, the illegal nature of his participation forces him to make a living off of throwing matches as dictated by his boss Gansaku Nanbu. However, this all changes when the Megalo Box champion Yuuri enters his shabby ring under the guise of just another challenger. Taken out in a single round, Junk Dog is left with a challenge: \"If you're serious about fighting me again, then fight your way up to me and my ring.\"\n\n\n\nFilled with overwhelming excitement and backed by the criminal syndicate responsible for his thrown matches, Junk Dog enters Megalonia: a world-spanning tournament that will decide the strongest Megalo Boxer of them all. Having no name of his own, he takes on the moniker of \"Joe\" as he begins his climb from the very bottom of the ranked list of fighters. With only three months left to qualify, Joe must face off against opponents the likes of which he has never fought in order to meet the challenge of his rival.\n\n\n\n(Source: MAL Rewrite)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/100298-531cfb87-1d14-4d2f-9e4b-6527ea946a46.jpg",
+    "slug": "megalobox-100298",
+    "airedFrom": "2026-09-26T17:30:24.688Z",
+    "airedTo": "2026-09-26T17:30:24.688Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 6,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:25.089Z",
+    "updatedAt": "2026-09-26T17:30:25.089Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "b1a6ac2d-b013-4ca6-b81a-7c9443a78ae6", "name": "Drama" },
+      { "id": "bb9fcf35-e2e6-4c5f-afaa-618a2b205c12", "name": "Sci-Fi" }
+    ]
+  },
+  {
+    "id": "361739fc-1467-4b15-b657-bb9a6587c319",
+    "title": "The Seven Deadly Sins: Dragon's Judgement",
+    "description": "Time is running out. The curse imposed on Elizabeth will kill her in few days. To lift the curse Meliodas and Ban have travelled to the Demon Realm to challenge Meliodas' father, the Demon King.\n\n\n\nMeanwhile, Merlin, Escanor, and Archangel Ludociel are set to slay Meliodas' brother Zeldris. Elsewhere, Meliodas' other brother Estarossa has kidnapped Elizabeth, and it falls to King, Diane, Gowther, and Hawk to rescue her.",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/116752-39335a28-430b-4b6e-9c02-b83e1189244d.jpg",
+    "slug": "the-seven-deadly-sins-dragon-s-judgement-116752",
+    "airedFrom": "2026-09-26T17:30:22.764Z",
+    "airedTo": "2026-09-26T17:30:22.764Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 7,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:23.698Z",
+    "updatedAt": "2026-09-26T17:30:23.698Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "ada2bf3f-3741-4c26-85bc-8bd5ec3d3b35", "name": "Adventure" },
+      { "id": "1e940bea-99fa-4558-860c-95622e100587", "name": "Comedy" }
+    ]
+  },
+  {
+    "id": "d12e9748-d7ce-4187-831b-41cda33f5382",
+    "title": "Dr. STONE New World Part 2",
+    "description": "Years ago, astronaut Byakuya left behind precious materials in the belief that his son, the scientifically-gifted Senkuu, would one day find them. In the present, the Kingdom of Science's Kohaku and Ginrou have infiltrated the harem of the Petrification Kingdom’s leader with the help of Amaryllis, a local girl. At first, their mission progresses without a hitch. Unfortunately, an error enacted by Kohaku and Ginrou leads Minister Ibara and the Island’s strongest warrior, Moz, to identify the intruding duo as enemies.\n\n\n\nEven worse, Moz tails Amaryllis when she returns to inform Senkuu of the news, discovering the scientist's secret hideout. However, Moz's agenda does not align with Ibara's—he wants to dethrone the minister and keep the petrification device for himself. If Senkuu plays his cards right, he could gain a powerful ally and win the war once and for all.\n\n\n\n(Source: MAL Rewrite)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/162670-cd402c3f-7caa-4819-ad93-663b26e7713c.jpg",
+    "slug": "dr-stone-new-world-part-2-162670",
+    "airedFrom": "2026-09-26T17:30:21.650Z",
+    "airedTo": "2026-09-26T17:30:21.650Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 8,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:22.139Z",
+    "updatedAt": "2026-09-26T17:30:22.139Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "ada2bf3f-3741-4c26-85bc-8bd5ec3d3b35", "name": "Adventure" },
+      { "id": "1e940bea-99fa-4558-860c-95622e100587", "name": "Comedy" }
+    ]
+  },
+  {
+    "id": "9baac04a-a3e9-4b2f-aebe-3f0559af637c",
+    "title": "Golden Kamuy",
+    "description": "In the early twentieth century, Russo-Japanese War veteran Saichi “Immortal” Sugimoto scratches out a meager existence during the postwar gold rush in the wilderness of Hokkaido. When he stumbles across a map to a fortune in hidden Ainu gold, he sets off on a treacherous quest to find it. But Sugimoto is not the only interested party, and everyone who knows about the gold will kill to possess it! Faced with the harsh conditions of the northern wilderness, ruthless criminals and rogue Japanese soldiers, Sugimoto will need all his skills and luck—and the help of an Ainu girl named Asirpa—to survive.\n\n\n\n(Source: VIZ Media)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/99699-0ba875fe-756c-4534-bcc5-64bbfb064433.jpg",
+    "slug": "golden-kamuy-99699",
+    "airedFrom": "2026-09-26T17:30:20.433Z",
+    "airedTo": "2026-09-26T17:30:20.433Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 9,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:21.006Z",
+    "updatedAt": "2026-09-26T17:30:21.006Z",
+    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
+    "genres": [
+      { "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" },
+      { "id": "ada2bf3f-3741-4c26-85bc-8bd5ec3d3b35", "name": "Adventure" },
+      { "id": "1e940bea-99fa-4558-860c-95622e100587", "name": "Comedy" }
+    ]
+  }
+]

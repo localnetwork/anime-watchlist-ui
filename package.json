@@ -9,14 +9,19 @@
   "scripts": {
     "lint": "prettier --write \"**/*.{js,vue,css,scss,html,md,json}\" --ignore-path .gitignore && eslint --fix -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
     "lint:check": "prettier \"**/*.{js,vue,css,scss,html,md,json}\" --ignore-path .gitignore && eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
-    "dev": "quasar dev",
-    "build": "quasar build",
+    "dev": "quasar dev && node src/lib/preBuildScripts/preBuildDev.js",
+    "build": "quasar build && node src/lib/preBuildScripts/preBuildDev.js",
+    "prebuild": "node src/lib/preBuildScripts/preBuildDev.js",
+    "predev": "node src/lib/preBuildScripts/preBuildDev.js",
     "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
     "@quasar/extras": "^2.1.0",
     "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.20.0",
+    "dotenv": "^18.0.4",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
     "pinia": "^4.0.2",
     "quasar": "^2.33.2",
     "tailwindcss": "^4.3.3",
