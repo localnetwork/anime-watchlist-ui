@@ -1,22 +1,5 @@
 [
   {
-    "id": "a4d7891f-a849-4f33-9489-0d81029496e6",
-    "title": "Member Seeded Anime 001",
-    "description": "Sample anime owned by seeded member user.",
-    "coverImageUrl": "https://pub-demo-anime.r2.dev/covers/member-seeded-anime-001.jpg",
-    "slug": "member-seeded-anime-001",
-    "airedFrom": null,
-    "airedTo": null,
-    "airedStatus": "AIRING",
-    "viewCount": 0,
-    "averageRating": 0,
-    "ratingCount": 0,
-    "createdAt": "2026-09-26T17:30:34.136Z",
-    "updatedAt": "2026-09-26T17:30:34.136Z",
-    "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
-    "genres": [{ "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" }]
-  },
-  {
     "id": "2e8c73d9-d108-41e9-b94d-42e250e761f7",
     "title": "A Lull in the Sea",
     "description": "Since long ago, human civilization had lived on the ocean floor. However, there were many humans who wanted to live above the surface and they moved to land creating a fundamental separation between the two. After their school closes down, four 14-year-old middle school students from the sea village, Shioshishio, have to attend Mihama Middle School on the surface. What follows is their struggles to adjust to a new environment and the relationships between the sea and land people, while dealing with their own newfound feelings that have just started appearing with the end of their childhood.\n\n\n\n(Source: Wikipedia)",
@@ -25,11 +8,11 @@
     "airedFrom": "2026-09-26T17:30:31.671Z",
     "airedTo": "2026-09-26T17:30:31.671Z",
     "airedStatus": "FINISHED",
-    "viewCount": 1,
+    "viewCount": 2,
     "averageRating": 0,
     "ratingCount": 0,
     "createdAt": "2026-09-26T17:30:33.404Z",
-    "updatedAt": "2026-09-26T17:30:33.404Z",
+    "updatedAt": "2026-09-26T19:52:36.264Z",
     "type": { "id": "05d9143b-2efa-4f17-a431-dcf7262e1dff", "name": "TV" },
     "genres": [
       { "id": "b1a6ac2d-b013-4ca6-b81a-7c9443a78ae6", "name": "Drama" },
@@ -203,5 +186,22 @@
       { "id": "ada2bf3f-3741-4c26-85bc-8bd5ec3d3b35", "name": "Adventure" },
       { "id": "1e940bea-99fa-4558-860c-95622e100587", "name": "Comedy" }
     ]
+  },
+  {
+    "id": "2f76fa33-e5b2-4dd1-91a8-9faefc8de8d4",
+    "title": "BAKI",
+    "description": "The protagonist, Baki Hanma, trains with an intense focus to become strong enough to surpass his father, Yujiro Hanma, the strongest fighter in the world. Five of the world's most violent and brutal death row inmates are gathering to face Baki. Their objective is to taste defeat -- their unmatched strength and skill have led them to grow bored of life itself, and they now seek out Baki in the hopes that he can overwhelm and utterly crush them. In this crisis, other underground martial art warriors gather to fight by Baki's side: Kaoru Hanayama, Gouki Shibukawa, Retsu Kaioh, and Doppo Orochi. An epic showdown between violent death row inmates and Baki and his friends begins!\n\n\n\n(Source: Netflix)",
+    "coverImageUrl": "https://pub-0809e76d945c4c3a91e0542ba95e8af3.r2.dev/covers/anilist/97888-0d00ec53-5b1c-410b-af0f-a44b2b0f9654.jpg",
+    "slug": "baki-97888",
+    "airedFrom": "2026-09-26T17:30:18.933Z",
+    "airedTo": "2026-09-26T17:30:18.933Z",
+    "airedStatus": "FINISHED",
+    "viewCount": 10,
+    "averageRating": 0,
+    "ratingCount": 0,
+    "createdAt": "2026-09-26T17:30:19.573Z",
+    "updatedAt": "2026-09-26T17:30:19.573Z",
+    "type": { "id": "821b53a4-c114-421a-a78d-13e70d01772b", "name": "ONA" },
+    "genres": [{ "id": "e08d97c5-1ffc-4981-8a61-ad51482b9a5e", "name": "Action" }]
   }
 ]

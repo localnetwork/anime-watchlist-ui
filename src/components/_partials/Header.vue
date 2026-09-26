@@ -97,12 +97,35 @@
           @click="uiStore.openAuthDialog('login')"
         />
 
-        <q-btn v-else flat round dense icon="account_circle" class="user-toggle">
-          <q-menu class="app-menu user-menu" :offset="[0, 10]" anchor="bottom right" self="top right">
+        <q-btn v-else flat round dense class="user-toggle">
+          <q-avatar size="28px">
+            <img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl" alt="Avatar" />
+            <q-icon v-else name="account_circle" size="28px" />
+          </q-avatar>
+          <q-menu
+            class="app-menu user-menu"
+            :offset="[0, 10]"
+            anchor="bottom right"
+            self="top right"
+          >
             <div class="menu-list">
               <div class="user-info">
                 <div class="user-name">{{ authStore.user?.name || authStore.user?.email }}</div>
               </div>
+
+              <router-link
+                v-if="authStore.user?.username"
+                :to="`/u/${authStore.user.username}`"
+                class="menu-item"
+              >
+                <q-icon name="person" />
+                <span>View Profile</span>
+              </router-link>
+
+              <router-link to="/profile/edit" class="menu-item">
+                <q-icon name="manage_accounts" />
+                <span>Edit Profile</span>
+              </router-link>
 
               <router-link
                 v-if="authStore.hasPermission(genrePermission)"
@@ -288,7 +311,7 @@ function onLogout() {
 
 .user-toggle {
   color: #d0d0d0;
-  font-size: 30px;
+  padding: 4px;
 }
 
 .user-toggle:hover {
@@ -322,6 +345,7 @@ function onLogout() {
 .menu-container {
   display: flex;
   align-items: flex-start;
+  background-color: #242424;
 }
 
 .menu-list {

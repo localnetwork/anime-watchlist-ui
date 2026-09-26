@@ -3,12 +3,12 @@
     <AppHeader />
 
     <q-page-container>
-      <main id="main" class="container">
+      <main id="main" class="container" :class="{ 'has-sidebar': showSidebar }">
         <div class="main-content">
           <router-view />
         </div>
 
-        <aside class="sidebar">
+        <aside v-if="showSidebar" class="sidebar">
           <div></div>
         </aside>
       </main>
@@ -19,16 +19,29 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
 import AppHeader from './Header.vue'
 import AuthDialog from '@/components/auth/AuthDialog.vue'
+
+const route = useRoute()
+
+const showSidebar = computed(() => {
+  return route.path === '/' || route.path.startsWith('/animes/')
+})
 </script>
 
 <style>
 #main {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr;
   gap: 30px;
   padding-top: 20px;
+}
+
+#main.has-sidebar {
+  grid-template-columns: 3fr 1fr;
 }
 
 .main-content {
@@ -41,11 +54,11 @@ import AuthDialog from '@/components/auth/AuthDialog.vue'
 
 /* Mobile */
 @media (max-width: 768px) {
-  #main {
+  #main.has-sidebar {
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
+  #main.has-sidebar .sidebar {
     display: none;
   }
 }

@@ -32,6 +32,23 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('user', JSON.stringify(user))
     },
 
+    setUser(user) {
+      this.user = { ...this.user, ...user }
+      localStorage.setItem('user', JSON.stringify(this.user))
+    },
+
+    async fetchMe() {
+      const { data } = await api.get('/auth/me')
+      this.setUser(data)
+      return data
+    },
+
+    async updateProfile(payload) {
+      const { data } = await api.put('/auth/me', payload)
+      this.setUser(data)
+      return data
+    },
+
     async login({ email, password }) {
       const { data } = await api.post('/auth/login', { email, password })
       this.setSession(data.token, data.user)
