@@ -16,22 +16,23 @@
         :img-src="anime.coverImageUrl"
         class="hero-slide"
       >
-        <div class="hero-overlay">
-          <div class="hero-content">
-            <h1 class="hero-title">
-              {{ anime.title }}
-            </h1>
+        <router-link :to="`/animes/${anime.slug}`">
+          <div class="hero-overlay">
+            <div class="hero-content">
+              <h1 class="hero-title">
+                {{ anime.title }}
+              </h1>
 
-            <p class="hero-description">
-              {{ anime.description }}
-            </p>
+              <p class="hero-description">
+                {{ anime.description }}
+              </p>
 
-            {{ console.log(anime) }}
-            <div class="hero-airdate">
-              Aired Date: {{ formatDate(anime.airedFrom) }} to {{ formatDate(anime.airedTo) }}
+              <div class="hero-airdate">
+                Aired Date: {{ formatDate(anime.airedFrom) }} to {{ formatDate(anime.airedTo) }}
+              </div>
             </div>
           </div>
-        </div>
+        </router-link>
       </q-carousel-slide>
     </q-carousel>
   </section>
@@ -59,6 +60,7 @@ const formatDate = (date) => {
 <style scoped>
 .hero-slider {
   width: 100%;
+  margin-bottom: 30px;
 }
 
 .hero-carousel {

@@ -43,9 +43,16 @@ export const preBuildDevelopment = async () => {
   const apiHealth = await axios.get(`${envVars.VITE_API_URL}/health`)
 
   const apiTopAnimes = await axios.get(
-    `${envVars.VITE_API_URL}/animes?limit=10&includes=genres,type`,
+    `${envVars.VITE_API_URL}/animes?sort=top&limit=10&includes=genres,type`,
   )
+
+  const topAnimesSidebar = await axios.get(
+    `${envVars.VITE_API_URL}/animes?sort=top&limit=5&includes=genres,type&airedStatus=AIRING`,
+  )
+  const recentAnimes = await axios.get(`${envVars.VITE_API_URL}/animes?sort=recent&limit=12`)
 
   generateStaticJson('health.json', apiHealth.data || [])
   generateStaticJson('top-animes.json', apiTopAnimes.data.data || [])
+  generateStaticJson('top-animes-sidebar.json', topAnimesSidebar.data.data || [])
+  generateStaticJson('recent-animes.json', recentAnimes.data.data || [])
 }

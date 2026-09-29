@@ -34,20 +34,6 @@
       </q-input>
 
       <q-select
-        v-model="filters.status"
-        :options="statusOptions"
-        label="Status"
-        dark
-        filled
-        dense
-        emit-value
-        map-options
-        clearable
-        class="filter-input"
-        @update:model-value="onFilterChange"
-      />
-
-      <q-select
         v-model="filters.airedStatus"
         :options="airedStatusOptions"
         label="Aired Status"
@@ -138,7 +124,7 @@
           <div class="anime-row-main">
             <h3 class="anime-row-title">{{ anime.title }}</h3>
             <p class="anime-row-meta">
-              {{ anime.type?.name || 'Unknown Type' }} • {{ formatStatus(anime.status) }} •
+              {{ anime.type?.name || 'Unknown Type' }} • {{ formatAiredStatus(anime.airedStatus) }} •
               {{ anime.episodes?.length || 0 }} episode(s)
             </p>
             <p class="anime-row-genres">
@@ -223,7 +209,6 @@ const meta = reactive({ page: 1, limit: INITIAL_PAGE_SIZE, total: 0, totalPages:
 
 const filters = reactive({
   search: '',
-  status: null,
   airedStatus: null,
   typeId: null,
   genreId: null,
@@ -231,13 +216,6 @@ const filters = reactive({
   sortDir: 'desc',
   page: 1,
 })
-
-const statusOptions = [
-  { label: 'Planned', value: 'PLANNED' },
-  { label: 'Watching', value: 'WATCHING' },
-  { label: 'Completed', value: 'COMPLETED' },
-  { label: 'Dropped', value: 'DROPPED' },
-]
 
 const airedStatusOptions = [
   { label: 'Not Yet Released', value: 'NOT_YET_RELEASED' },
@@ -259,7 +237,6 @@ const sortByOptions = [
 const hasActiveFilters = computed(
   () =>
     Boolean(filters.search) ||
-    Boolean(filters.status) ||
     Boolean(filters.airedStatus) ||
     Boolean(filters.typeId) ||
     Boolean(filters.genreId),
@@ -267,7 +244,7 @@ const hasActiveFilters = computed(
 
 const hasMore = computed(() => animeList.value.length < meta.total)
 
-function formatStatus(status) {
+function formatAiredStatus(status) {
   if (!status) return 'Unknown Status'
   return status
     .toLowerCase()
@@ -287,7 +264,6 @@ async function fetchAnime({ append = false } = {}) {
     const { data } = await api.get('/watchlist/manage/animes', {
       params: {
         search: filters.search || undefined,
-        status: filters.status || undefined,
         airedStatus: filters.airedStatus || undefined,
         typeId: filters.typeId || undefined,
         genreId: filters.genreId || undefined,
@@ -329,7 +305,6 @@ function toggleSortDir() {
 
 function clearFilters() {
   filters.search = ''
-  filters.status = null
   filters.airedStatus = null
   filters.typeId = null
   filters.genreId = null

@@ -56,9 +56,9 @@
 
     <div class="anime-row">
       <q-select
-        v-model="form.status"
-        :options="statusOptions"
-        label="Status"
+        v-model="form.airedStatus"
+        :options="airedStatusOptions"
+        label="Aired Status"
         dark
         filled
         emit-value
@@ -66,6 +66,28 @@
         class="anime-input"
       />
 
+      <q-input
+        v-model="form.airedFrom"
+        label="Aired From"
+        type="date"
+        dark
+        filled
+        clearable
+        class="anime-input"
+      />
+
+      <q-input
+        v-model="form.airedTo"
+        label="Aired To"
+        type="date"
+        dark
+        filled
+        clearable
+        class="anime-input"
+      />
+    </div>
+
+    <div class="anime-row">
       <q-select
         v-model="form.typeId"
         :options="typeOptions"
@@ -150,12 +172,20 @@ const emit = defineEmits(['success', 'cancel'])
 
 const isEditing = computed(() => Boolean(props.anime?.id))
 
-const statusOptions = [
-  { label: 'Planned', value: 'PLANNED' },
-  { label: 'Watching', value: 'WATCHING' },
-  { label: 'Completed', value: 'COMPLETED' },
-  { label: 'Dropped', value: 'DROPPED' },
+const airedStatusOptions = [
+  { label: 'Not Yet Released', value: 'NOT_YET_RELEASED' },
+  { label: 'Airing', value: 'AIRING' },
+  { label: 'Finished', value: 'FINISHED' },
+  { label: 'Hiatus', value: 'HIATUS' },
+  { label: 'Cancelled', value: 'CANCELLED' },
 ]
+
+function toDateInputValue(date) {
+  if (!date) return ''
+  const parsed = new Date(date)
+  if (Number.isNaN(parsed.getTime())) return ''
+  return parsed.toISOString().slice(0, 10)
+}
 
 const genreOptions = ref([])
 const authorOptions = ref([])
@@ -171,7 +201,9 @@ const form = reactive({
   title: props.anime?.title || '',
   description: props.anime?.description || '',
   coverImageUrl: props.anime?.coverImageUrl || '',
-  status: props.anime?.status || 'PLANNED',
+  airedStatus: props.anime?.airedStatus || 'NOT_YET_RELEASED',
+  airedFrom: toDateInputValue(props.anime?.airedFrom),
+  airedTo: toDateInputValue(props.anime?.airedTo),
   typeId: props.anime?.type?.id || null,
   rating: props.anime?.rating ?? null,
   notes: props.anime?.notes || '',
@@ -226,7 +258,9 @@ async function onSubmit() {
       title: form.title,
       description: form.description,
       coverImageUrl: form.coverImageUrl,
-      status: form.status,
+      airedStatus: form.airedStatus,
+      airedFrom: form.airedFrom || null,
+      airedTo: form.airedTo || null,
       typeId: form.typeId || null,
       rating: form.rating === '' ? null : form.rating,
       notes: form.notes,

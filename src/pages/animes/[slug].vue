@@ -11,11 +11,41 @@
     </div>
 
     <div v-else class="detail-container">
+      <div class="episode-video-container">
+        <video
+          v-if="selectedEpisode?.videoUrl"
+          :key="selectedEpisode.id"
+          :src="selectedEpisode.videoUrl"
+          controls
+          autoplay
+          class="episode-video-player"
+        />
+        <div v-else class="no-video-placeholder">
+          <q-icon name="movie" size="48px" color="grey-6" />
+          <p>No video available for this episode yet.</p>
+        </div>
+      </div>
       <div class="detail-hero">
-        <q-img :src="anime.coverImageUrl" ratio="2/3" class="detail-cover" />
+        <!-- <q-img :src="anime.coverImageUrl" ratio="2/3" class="detail-cover" /> -->
 
         <div class="detail-info">
-          <h1 class="detail-title">{{ anime.title }}</h1>
+          <div class="detail-title-row">
+            <h1 class="detail-title">{{ anime.title }}</h1>
+
+            <q-btn
+              v-if="authStore.isAuthenticated"
+              flat
+              round
+              dense
+              class="favorite-btn"
+              :class="{ 'favorite-btn-active': isFavorited }"
+              :loading="favoriteLoading"
+              @click="onToggleFavorite"
+            >
+              <q-icon :name="isFavorited ? 'favorite' : 'favorite_border'" size="26px" />
+              <q-tooltip>{{ isFavorited ? 'Remove from Favorites' : 'Add to Favorites' }}</q-tooltip>
+            </q-btn>
+          </div>
 
           <div class="detail-meta">
             <span v-if="anime.type" class="meta-chip">{{ anime.type.name }}</span>
@@ -38,11 +68,7 @@
 
           <div v-if="anime.authors?.length" class="detail-authors">
             <span class="detail-authors-label">Authors:</span>
-            <span
-              v-for="(author, index) in anime.authors"
-              :key="author.id"
-              class="detail-author"
-            >
+            <span v-for="(author, index) in anime.authors" :key="author.id" class="detail-author">
               {{ author.name }}<span v-if="author.role"> ({{ author.role }})</span
               >{{ index < anime.authors.length - 1 ? ', ' : '' }}
             </span>
@@ -51,33 +77,39 @@
           <p class="detail-aired">
             Aired: {{ formatDate(anime.airedFrom) }} — {{ formatDate(anime.airedTo) }}
           </p>
+
+          <div v-if="authStore.isAuthenticated" class="detail-status">
+            <span class="detail-status-label">My Status:</span>
+            <q-select
+              v-model="myStatus"
+              :options="statusOptions"
+              dark
+              filled
+              dense
+              emit-value
+              map-options
+              clearable
+              class="status-select"
+              :loading="statusLoading"
+              @update:model-value="onStatusChange"
+            />
+          </div>
         </div>
       </div>
 
-      <q-separator dark spaced />
+      <!-- <q-separator dark spaced /> -->
 
-      <div class="episode-player-section">
-        <h2 class="section-title">{{ selectedEpisode?.title || `Episode ${selectedEpisode?.episodeNumber}` }}</h2>
-
-        <video
-          v-if="selectedEpisode?.videoUrl"
-          :key="selectedEpisode.id"
-          :src="selectedEpisode.videoUrl"
-          controls
-          autoplay
-          class="episode-video-player"
-        />
-        <div v-else class="no-video-placeholder">
-          <q-icon name="movie" size="48px" color="grey-6" />
-          <p>No video available for this episode yet.</p>
-        </div>
+      <!-- <div class="episode-player-section">
+        <h2 class="section-title">
+          {{ selectedEpisode?.title || `Episode ${selectedEpisode?.episodeNumber}` }}
+        </h2>
 
         <p v-if="selectedEpisode?.description" class="episode-description">
           {{ selectedEpisode.description }}
         </p>
-      </div>
+      </div> -->
 
-      <q-separator dark spaced />
+      <!-- <q-separator dark spaced /> -->
 
       <div class="episode-list-section">
         <h2 class="section-title">Episodes</h2>
@@ -89,13 +121,15 @@
             :key="episode.id"
             no-caps
             unelevated
-            :class="[
-              'episode-btn',
-              { 'episode-btn-active': selectedEpisode?.id === episode.id },
-            ]"
+            :class="['episode-btn', { 'episode-btn-active': selectedEpisode?.id === episode.id }]"
             @click="selectEpisode(episode)"
           >
-            <q-icon v-if="episode.videoUrl" name="play_circle" size="16px" class="episode-btn-icon" />
+            <q-icon
+              v-if="episode.videoUrl"
+              name="play_circle"
+              size="16px"
+              class="episode-btn-icon"
+            />
             <q-icon v-else name="lock" size="14px" class="episode-btn-icon" />
             {{ episode.episodeNumber }}
           </q-btn>
@@ -109,12 +143,25 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { api } from '@/boot/axios'
+import { useAuthStore } from '@/stores/auth-store'
 
 const route = useRoute()
+const authStore = useAuthStore()
 
 const loading = ref(true)
 const notFound = ref(false)
 const selectedEpisode = ref(null)
+const myStatus = ref(null)
+const statusLoading = ref(false)
+const isFavorited = ref(false)
+const favoriteLoading = ref(false)
+
+const statusOptions = [
+  { label: 'Planned', value: 'PLANNED' },
+  { label: 'Watching', value: 'WATCHING' },
+  { label: 'Completed', value: 'COMPLETED' },
+  { label: 'Dropped', value: 'DROPPED' },
+]
 
 const anime = reactive({
   title: '',
@@ -159,16 +206,66 @@ function formatAiredStatus(status) {
     .join(' ')
 }
 
+async function fetchMyStatus() {
+  if (!authStore.isAuthenticated || !anime.id) return
+  try {
+    const { data } = await api.get(`/watchlist/${anime.id}/status`)
+    myStatus.value = data.status
+  } catch {
+    myStatus.value = null
+  }
+}
+
+async function onStatusChange(value) {
+  if (!anime.id) return
+  statusLoading.value = true
+  try {
+    if (value) {
+      await api.put(`/watchlist/${anime.id}/status`, { status: value })
+    } else {
+      await api.delete(`/watchlist/${anime.id}/status`)
+    }
+  } finally {
+    statusLoading.value = false
+  }
+}
+
+async function fetchFavoriteStatus() {
+  if (!authStore.isAuthenticated || !anime.id) return
+  try {
+    const { data } = await api.get(`/watchlist/${anime.id}/favorite`)
+    isFavorited.value = Boolean(data.favorited)
+  } catch {
+    isFavorited.value = false
+  }
+}
+
+async function onToggleFavorite() {
+  if (!anime.id) return
+  favoriteLoading.value = true
+  try {
+    if (isFavorited.value) {
+      await api.delete(`/watchlist/${anime.id}/favorite`)
+      isFavorited.value = false
+    } else {
+      await api.put(`/watchlist/${anime.id}/favorite`)
+      isFavorited.value = true
+    }
+  } finally {
+    favoriteLoading.value = false
+  }
+}
+
 async function fetchAnime() {
   loading.value = true
   notFound.value = false
   try {
     const { data } = await api.get(`/animes/${route.params.slug}`)
     Object.assign(anime, data)
-    const episodes = [...(data.episodes || [])].sort(
-      (a, b) => a.episodeNumber - b.episodeNumber,
-    )
+    const episodes = [...(data.episodes || [])].sort((a, b) => a.episodeNumber - b.episodeNumber)
     selectedEpisode.value = episodes.find((ep) => ep.episodeNumber === 1) || episodes[0] || null
+    await fetchMyStatus()
+    await fetchFavoriteStatus()
   } catch (err) {
     if (err?.response?.status === 404) {
       notFound.value = true
@@ -184,10 +281,6 @@ onMounted(fetchAnime)
 </script>
 
 <style scoped>
-.anime-detail-page {
-  color: #ffffff;
-}
-
 .detail-loading,
 .detail-not-found {
   display: flex;
@@ -231,6 +324,31 @@ onMounted(fetchAnime)
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 12px;
+  line-height: 32px;
+}
+
+.detail-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.detail-title-row .detail-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.favorite-btn {
+  color: #9a9a9a;
+  margin-top: -4px;
+}
+
+.favorite-btn:hover {
+  color: #ff6b9d;
+}
+
+.favorite-btn-active {
+  color: #ff3d71;
 }
 
 .detail-meta {
@@ -248,7 +366,6 @@ onMounted(fetchAnime)
   background-color: #242424;
   border-radius: 20px;
   font-size: 13px;
-  color: #d0d0d0;
 }
 
 .detail-genres {
@@ -263,32 +380,43 @@ onMounted(fetchAnime)
   background-color: #7c4dff;
   border-radius: 20px;
   font-size: 12px;
-  color: #ffffff;
 }
 
 .detail-description {
-  color: #cccccc;
   line-height: 1.7;
   margin: 0 0 16px;
   white-space: pre-wrap;
 }
 
 .detail-authors {
-  color: #9a9a9a;
   font-size: 14px;
   margin: 0 0 12px;
 }
 
 .detail-authors-label {
-  color: #ffffff;
   font-weight: 600;
   margin-right: 6px;
 }
 
 .detail-aired {
-  color: #7c7c7c;
   font-size: 13px;
   margin: 0;
+}
+
+.detail-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.detail-status-label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.status-select {
+  min-width: 160px;
 }
 
 .section-title {
@@ -299,30 +427,41 @@ onMounted(fetchAnime)
 
 .episode-video-player {
   width: 100%;
-  max-height: 560px;
   border-radius: 10px;
   background-color: #000000;
 }
 
+.episode-video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  margin-bottom: 30px;
+}
+.episode-video-container > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .no-video-placeholder {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-flow: column;
+  justify-content: center;
   gap: 8px;
   padding: 60px 0;
   color: #9a9a9a;
   background-color: #1c1c1c;
   border-radius: 10px;
+  height: 100%;
+  width: 100%;
 }
 
 .episode-description {
-  color: #9a9a9a;
   margin-top: 16px;
   line-height: 1.6;
-}
-
-.no-episodes {
-  color: #9a9a9a;
 }
 
 .episode-grid {
@@ -336,6 +475,7 @@ onMounted(fetchAnime)
   height: 40px;
   background-color: #1c1c1c;
   color: #d0d0d0;
+
   border-radius: 6px;
 }
 

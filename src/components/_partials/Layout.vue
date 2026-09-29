@@ -9,7 +9,9 @@
         </div>
 
         <aside v-if="showSidebar" class="sidebar">
-          <div></div>
+          <div>
+            <TopAnimes />
+          </div>
         </aside>
       </main>
     </q-page-container>
@@ -24,7 +26,7 @@ import { useRoute } from 'vue-router'
 
 import AppHeader from './Header.vue'
 import AuthDialog from '@/components/auth/AuthDialog.vue'
-
+import TopAnimes from '@/components/blocks/TopAnimes.vue'
 const route = useRoute()
 
 const showSidebar = computed(() => {

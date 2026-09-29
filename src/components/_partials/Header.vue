@@ -70,7 +70,7 @@
         </div>
 
         <!-- Search -->
-        <div class="search-wrapper">
+        <div ref="searchWrapperRef" class="search-wrapper">
           <q-input
             v-model="search"
             class="search-input"
@@ -78,11 +78,50 @@
             dense
             placeholder="Search anime..."
             type="text"
+            @focus="onSearchFocus"
+            @keyup.enter="goToSearchPage"
           >
             <template #prepend>
-              <q-icon name="search" class="search-icon" />
+              <q-icon name="search" class="search-icon" style="cursor: pointer" @click="goToSearchPage" />
+            </template>
+            <template v-if="search" #append>
+              <q-icon name="close" class="search-icon" style="cursor: pointer" @click="clearSearch" />
             </template>
           </q-input>
+
+          <div v-if="menuOpen" class="search-dropdown">
+            <div class="search-dropdown-label">
+              {{ search ? 'Search Results' : 'Recommended For You' }}
+            </div>
+
+            <div v-if="suggestionsLoading" class="search-dropdown-loading">
+              <q-spinner color="primary" size="20px" />
+            </div>
+
+            <template v-else>
+              <router-link
+                v-for="anime in suggestions"
+                :key="anime.id"
+                :to="`/animes/${anime.slug}`"
+                class="search-dropdown-item"
+                @click="onSuggestionClick"
+              >
+                <img :src="anime.coverImageUrl" :alt="anime.title" class="search-dropdown-image" />
+                <div class="search-dropdown-info">
+                  <div class="search-dropdown-title">{{ anime.title }}</div>
+                  <div v-if="anime.type?.name" class="search-dropdown-type">
+                    {{ anime.type.name }}
+                  </div>
+                </div>
+              </router-link>
+
+              <div v-if="!suggestions.length" class="search-dropdown-empty">No anime found.</div>
+
+              <div v-if="search" class="search-dropdown-viewall" @click="goToSearchPage">
+                View all results for "{{ search }}"
+              </div>
+            </template>
+          </div>
         </div>
       </div>
 
@@ -125,6 +164,15 @@
               <router-link to="/profile/edit" class="menu-item">
                 <q-icon name="manage_accounts" />
                 <span>Edit Profile</span>
+              </router-link>
+
+              <router-link
+                v-if="authStore.hasPermission(favoritePermission)"
+                to="/profile/favorites"
+                class="menu-item"
+              >
+                <q-icon name="favorite" />
+                <span>My Favorites</span>
               </router-link>
 
               <router-link
@@ -176,14 +224,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import AppLogo from '../icons/AppLogo.vue'
+import { api } from '@/boot/axios'
 import { useAuthStore } from '@/stores/auth-store'
 import { useUiStore } from '@/stores/ui-store'
 
 const search = ref('')
 const activeSubmenu = ref(null)
+const menuOpen = ref(false)
+const suggestions = ref([])
+const suggestionsLoading = ref(false)
+const searchWrapperRef = ref(null)
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -193,11 +246,75 @@ const genrePermission = 'genre.manage'
 const typePermission = 'type.manage'
 const animePermissions = ['anime.create', 'anime.update', 'anime.delete']
 const ratingPermission = 'anime.update'
+const favoritePermission = 'anime.favorite.manage'
 
 function onLogout() {
   authStore.logout()
   router.push('/')
 }
+
+let debounceTimer = null
+
+async function fetchSuggestions(term) {
+  suggestionsLoading.value = true
+  try {
+    const { data } = await api.get('/animes', {
+      params: term
+        ? { search: term, limit: 6, sort: 'recent' }
+        : { limit: 6, sort: 'top' },
+    })
+    suggestions.value = data?.data || []
+  } catch {
+    suggestions.value = []
+  } finally {
+    suggestionsLoading.value = false
+  }
+}
+
+function onSearchFocus() {
+  menuOpen.value = true
+  fetchSuggestions(search.value.trim())
+}
+
+watch(search, (value) => {
+  if (!menuOpen.value) return
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => {
+    fetchSuggestions(value.trim())
+  }, 300)
+})
+
+function clearSearch() {
+  search.value = ''
+  fetchSuggestions('')
+}
+
+function onSuggestionClick() {
+  menuOpen.value = false
+  search.value = ''
+}
+
+function goToSearchPage() {
+  const term = search.value.trim()
+  if (!term) return
+  menuOpen.value = false
+  router.push({ path: '/search', query: { q: term } })
+}
+
+function onClickOutside(event) {
+  if (searchWrapperRef.value && !searchWrapperRef.value.contains(event.target)) {
+    menuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', onClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onClickOutside)
+  clearTimeout(debounceTimer)
+})
 </script>
 
 <style scoped>
@@ -280,6 +397,102 @@ function onLogout() {
   font-size: 20px;
 }
 
+/* Search dropdown */
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 3000;
+
+  max-height: 420px;
+  overflow-y: auto;
+
+  background-color: #242424;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  padding: 8px 0;
+}
+
+.search-dropdown-label {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #7c7c7c;
+}
+
+.search-dropdown-loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.search-dropdown-empty {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #7c7c7c;
+}
+
+.search-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 8px 16px;
+
+  text-decoration: none;
+  color: inherit;
+}
+
+.search-dropdown-item:hover {
+  background-color: #333333;
+}
+
+.search-dropdown-image {
+  width: 40px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 4px;
+  background-color: #0e0e0e;
+  flex-shrink: 0;
+}
+
+.search-dropdown-info {
+  min-width: 0;
+}
+
+.search-dropdown-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-dropdown-type {
+  font-size: 12px;
+  color: #7c7c7c;
+  margin-top: 2px;
+}
+
+.search-dropdown-viewall {
+  padding: 10px 16px;
+  margin-top: 4px;
+  border-top: 1px solid #333333;
+
+  font-size: 13px;
+  color: #7c4dff;
+  cursor: pointer;
+}
+
+.search-dropdown-viewall:hover {
+  color: #8f67ff;
+}
+
 /* Sign In */
 
 .sign-in-btn {
@@ -338,7 +551,8 @@ function onLogout() {
 
 /* Main menu */
 
-.app-menu {
+.app-menu,
+.q-menu {
   background: #242424 !important;
 }
 
