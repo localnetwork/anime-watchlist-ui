@@ -1,7 +1,32 @@
 <template>
   <q-page class="q-pa-lg anime-detail-page">
-    <div v-if="loading" class="detail-loading">
-      <q-spinner color="primary" size="32px" />
+    <div v-if="loading" class="detail-container">
+      <div class="episode-video-container">
+        <q-skeleton dark square animation="wave" class="skeleton-video" />
+      </div>
+      <div class="detail-info">
+        <q-skeleton dark type="text" animation="wave" width="55%" height="32px" class="q-mb-md" />
+        <div class="skeleton-row q-mb-md">
+          <q-skeleton v-for="n in 3" :key="n" dark type="QBadge" animation="wave" width="70px" />
+        </div>
+        <div class="skeleton-row q-mb-md">
+          <q-skeleton v-for="n in 4" :key="n" dark type="QChip" animation="wave" width="80px" />
+        </div>
+        <q-skeleton dark type="text" animation="wave" />
+        <q-skeleton dark type="text" animation="wave" />
+        <q-skeleton dark type="text" animation="wave" width="70%" class="q-mb-md" />
+        <q-skeleton dark type="text" animation="wave" width="40%" />
+      </div>
+      <div class="skeleton-row q-mt-lg">
+        <q-skeleton
+          v-for="n in 12"
+          :key="n"
+          dark
+          animation="wave"
+          width="48px"
+          height="40px"
+        />
+      </div>
     </div>
 
     <div v-else-if="notFound" class="detail-not-found">
@@ -78,6 +103,33 @@
             Aired: {{ formatDate(anime.airedFrom) }} — {{ formatDate(anime.airedTo) }}
           </p>
 
+          <div v-if="authStore.hasPermission('anime.rating.manage')" class="detail-rating">
+            <span class="detail-status-label">My Rating:</span>
+            <q-rating
+              v-model="myRating"
+              :max="10"
+              size="20px"
+              color="amber"
+              color-selected="amber"
+              icon="star_border"
+              icon-selected="star"
+              :readonly="ratingLoading"
+              @update:model-value="onRatingChange"
+            />
+            <span v-if="myRating" class="rating-value">{{ myRating }}/10</span>
+            <q-btn
+              v-if="myRating"
+              flat
+              dense
+              no-caps
+              size="sm"
+              label="Clear"
+              class="rating-clear"
+              :disable="ratingLoading"
+              @click="onRatingClear"
+            />
+          </div>
+
           <div v-if="authStore.isAuthenticated" class="detail-status">
             <span class="detail-status-label">My Status:</span>
             <q-select
@@ -142,6 +194,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { Notify } from 'quasar'
 import { api } from '@/boot/axios'
 import { useAuthStore } from '@/stores/auth-store'
 
@@ -155,6 +208,50 @@ const myStatus = ref(null)
 const statusLoading = ref(false)
 const isFavorited = ref(false)
 const favoriteLoading = ref(false)
+const myRating = ref(0)
+const ratingLoading = ref(false)
+
+async function fetchMyRating() {
+  if (!authStore.hasPermission('anime.rating.manage') || !anime.id) return
+  try {
+    const { data } = await api.get(`/watchlist/${anime.id}/rating`)
+    myRating.value = data.rating || 0
+  } catch {
+    myRating.value = 0
+  }
+}
+
+function applyRatingStats(stats) {
+  anime.averageRating = stats.averageRating
+  anime.ratingCount = stats.ratingCount
+}
+
+async function onRatingChange(value) {
+  if (!anime.id || !value) return
+  ratingLoading.value = true
+  try {
+    const { data } = await api.put(`/watchlist/${anime.id}/rating`, { rating: value })
+    applyRatingStats(data)
+  } catch {
+    await fetchMyRating()
+    Notify.create({ type: 'negative', message: 'Unable to save rating' })
+  } finally {
+    ratingLoading.value = false
+  }
+}
+
+async function onRatingClear() {
+  ratingLoading.value = true
+  try {
+    const { data } = await api.delete(`/watchlist/${anime.id}/rating`)
+    myRating.value = 0
+    applyRatingStats(data)
+  } catch {
+    Notify.create({ type: 'negative', message: 'Unable to clear rating' })
+  } finally {
+    ratingLoading.value = false
+  }
+}
 
 const statusOptions = [
   { label: 'Planned', value: 'PLANNED' },
@@ -266,6 +363,7 @@ async function fetchAnime() {
     selectedEpisode.value = episodes.find((ep) => ep.episodeNumber === 1) || episodes[0] || null
     await fetchMyStatus()
     await fetchFavoriteStatus()
+    await fetchMyRating()
   } catch (err) {
     if (err?.response?.status === 404) {
       notFound.value = true
@@ -465,6 +563,33 @@ onMounted(fetchAnime)
 }
 
 .episode-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skeleton-video {
+  border-radius: 10px;
+}
+
+.detail-rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.rating-value {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.rating-clear {
+  color: #9a9a9a;
+}
+
+.skeleton-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

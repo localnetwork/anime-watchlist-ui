@@ -125,17 +125,8 @@
           </router-link>
         </div>
 
-        <div class="search-pagination">
-          <q-pagination
-            v-model="query.page"
-            :max="meta.totalPages || 1"
-            :max-pages="6"
-            boundary-numbers
-            direction-links
-            color="primary"
-            dark
-            @update:model-value="fetchResults"
-          />
+        <div ref="sentinelRef" class="search-sentinel">
+          <q-spinner v-if="loadingMore" color="primary" size="28px" />
         </div>
       </template>
     </div>
@@ -143,7 +134,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '@/boot/axios'
 import FilterPanel from '@/components/_partials/FilterPanel.vue'
@@ -153,8 +144,12 @@ const router = useRouter()
 
 const drawerOpen = ref(false)
 const loading = ref(false)
+const loadingMore = ref(false)
 const results = ref([])
 const meta = reactive({ totalPages: 1 })
+const sentinelRef = ref(null)
+let observer = null
+let requestId = 0
 
 const genreOptions = ref([])
 const typeOptions = ref([])
@@ -179,7 +174,7 @@ const query = reactive({
   typeId: route.query.typeId || null,
   airedStatus: route.query.airedStatus || null,
   sort: route.query.sort || 'recent',
-  page: Number(route.query.page) || 1,
+  page: 1,
 })
 
 async function loadFilterOptions() {
@@ -197,13 +192,19 @@ function syncRouteQuery() {
       ...(query.typeId ? { typeId: query.typeId } : {}),
       ...(query.airedStatus ? { airedStatus: query.airedStatus } : {}),
       ...(query.sort && query.sort !== 'recent' ? { sort: query.sort } : {}),
-      ...(query.page && query.page !== 1 ? { page: query.page } : {}),
     },
   })
 }
 
-async function fetchResults() {
-  loading.value = true
+async function fetchResults({ append = false } = {}) {
+  const currentRequest = ++requestId
+  if (append) {
+    loadingMore.value = true
+  } else {
+    query.page = 1
+    loading.value = true
+    loadingMore.value = false
+  }
   try {
     const { data } = await api.get('/animes', {
       params: {
@@ -216,19 +217,34 @@ async function fetchResults() {
         limit: 20,
       },
     })
-    results.value = data?.data || []
+    if (currentRequest !== requestId) return
+    const items = data?.data || []
+    results.value = append ? [...results.value, ...items] : items
     meta.totalPages = data?.meta?.totalPages || 1
   } catch {
-    results.value = []
-    meta.totalPages = 1
+    if (currentRequest !== requestId) return
+    if (append) {
+      query.page -= 1
+    } else {
+      results.value = []
+      meta.totalPages = 1
+    }
   } finally {
-    loading.value = false
+    if (currentRequest === requestId) {
+      loading.value = false
+      loadingMore.value = false
+    }
   }
+}
+
+function loadMore() {
+  if (loading.value || loadingMore.value || query.page >= meta.totalPages) return
+  query.page += 1
+  fetchResults({ append: true })
 }
 
 function applyFilters() {
   drawerOpen.value = false
-  query.page = 1
   syncRouteQuery()
   fetchResults()
 }
@@ -241,15 +257,30 @@ watch(
     query.typeId = newQuery.typeId || null
     query.airedStatus = newQuery.airedStatus || null
     query.sort = newQuery.sort || 'recent'
-    query.page = Number(newQuery.page) || 1
     fetchResults()
   },
 )
 
+// The sentinel only exists once results render, so (re)attach when it appears.
+watch(sentinelRef, (el, oldEl) => {
+  if (oldEl) observer?.unobserve(oldEl)
+  if (el) observer?.observe(el)
+})
+
 onMounted(async () => {
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) loadMore()
+    },
+    { rootMargin: '300px' },
+  )
+  await nextTick()
+  if (sentinelRef.value) observer.observe(sentinelRef.value)
   await loadFilterOptions()
   await fetchResults()
 })
+
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <style scoped>
@@ -360,10 +391,11 @@ onMounted(async () => {
   color: #9a9a9a;
 }
 
-.search-pagination {
+.search-sentinel {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  min-height: 40px;
+  margin-top: 24px;
 }
 
 @media (max-width: 992px) {

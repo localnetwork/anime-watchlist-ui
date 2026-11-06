@@ -5,7 +5,13 @@
       <div class="header-left">
         <!-- Menu -->
         <q-btn flat dense round icon="menu" aria-label="Menu" class="app-toggle">
-          <q-menu class="app-menu" :offset="[0, 10]" @hide="activeSubmenu = null">
+          <q-menu
+            ref="mainMenuRef"
+            class="app-menu"
+            :offset="[0, 10]"
+            @show="loadMenuData"
+            @hide="activeSubmenu = null"
+          >
             <div class="menu-container">
               <!-- Main menu -->
               <div class="menu-list">
@@ -26,36 +32,49 @@
                   <q-icon name="chevron_right" class="menu-arrow" />
                 </div>
 
-                <a href="#" class="menu-item">
+                <router-link
+                  :to="{ path: '/search', query: { airedStatus: 'NOT_YET_RELEASED' } }"
+                  class="menu-item"
+                  @click="closeMenu"
+                >
                   <q-icon name="event" />
                   <span>Upcoming</span>
-                </a>
+                </router-link>
 
-                <a href="#" class="menu-item">
+                <router-link
+                  :to="{ path: '/search', query: { airedStatus: 'AIRING' } }"
+                  class="menu-item"
+                  @click="closeMenu"
+                >
                   <q-icon name="play_circle" />
                   <span>Ongoing</span>
-                </a>
+                </router-link>
               </div>
 
               <!-- Nested menu -->
               <div v-if="activeSubmenu" class="submenu">
                 <template v-if="activeSubmenu === 'genres'">
-                  <a href="#" class="submenu-item">Action</a>
-                  <a href="#" class="submenu-item">Adventure</a>
-                  <a href="#" class="submenu-item">Comedy</a>
-                  <a href="#" class="submenu-item">Drama</a>
-                  <a href="#" class="submenu-item">Fantasy</a>
-                  <a href="#" class="submenu-item">Romance</a>
-                  <a href="#" class="submenu-item">Sci-Fi</a>
-                  <a href="#" class="submenu-item">Thriller</a>
+                  <router-link
+                    v-for="genre in genres"
+                    :key="genre.id"
+                    :to="{ path: '/search', query: { genreId: genre.id } }"
+                    class="submenu-item"
+                    @click="closeMenu"
+                  >
+                    {{ genre.name }}
+                  </router-link>
                 </template>
 
                 <template v-if="activeSubmenu === 'types'">
-                  <a href="#" class="submenu-item">TV</a>
-                  <a href="#" class="submenu-item">Movie</a>
-                  <a href="#" class="submenu-item">OVA</a>
-                  <a href="#" class="submenu-item">ONA</a>
-                  <a href="#" class="submenu-item">Special</a>
+                  <router-link
+                    v-for="type in types"
+                    :key="type.id"
+                    :to="{ path: '/search', query: { typeId: type.id } }"
+                    class="submenu-item"
+                    @click="closeMenu"
+                  >
+                    {{ type.name }}
+                  </router-link>
                 </template>
               </div>
             </div>
@@ -176,6 +195,15 @@
               </router-link>
 
               <router-link
+                v-if="authStore.hasPermission(ratingManagePermission)"
+                to="/profile/ratings"
+                class="menu-item"
+              >
+                <q-icon name="grade" />
+                <span>My Ratings</span>
+              </router-link>
+
+              <router-link
                 v-if="authStore.hasPermission(genrePermission)"
                 to="/manage/genres"
                 class="menu-item"
@@ -237,6 +265,23 @@ const menuOpen = ref(false)
 const suggestions = ref([])
 const suggestionsLoading = ref(false)
 const searchWrapperRef = ref(null)
+const mainMenuRef = ref(null)
+const genres = ref([])
+const types = ref([])
+
+async function loadMenuData() {
+  try {
+    const [genresRes, typesRes] = await Promise.all([api.get('/genres'), api.get('/types')])
+    genres.value = genresRes.data
+    types.value = typesRes.data
+  } catch {
+    // keep previously loaded lists
+  }
+}
+
+function closeMenu() {
+  mainMenuRef.value?.hide()
+}
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -247,6 +292,7 @@ const typePermission = 'type.manage'
 const animePermissions = ['anime.create', 'anime.update', 'anime.delete']
 const ratingPermission = 'anime.update'
 const favoritePermission = 'anime.favorite.manage'
+const ratingManagePermission = 'anime.rating.manage'
 
 function onLogout() {
   authStore.logout()

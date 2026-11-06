@@ -64,6 +64,7 @@ const passwordDialogOpen = ref(false)
   font-size: 22px;
   font-weight: 600;
   margin: 0;
+  line-height: 100%;
 }
 
 .profile-subtitle {

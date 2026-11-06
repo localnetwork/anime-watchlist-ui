@@ -99,18 +99,6 @@
         clearable
         class="anime-input"
       />
-
-      <q-input
-        v-model.number="form.rating"
-        label="Rating (1-10)"
-        type="number"
-        min="1"
-        max="10"
-        dark
-        filled
-        clearable
-        class="anime-input"
-      />
     </div>
 
     <q-select
@@ -205,7 +193,6 @@ const form = reactive({
   airedFrom: toDateInputValue(props.anime?.airedFrom),
   airedTo: toDateInputValue(props.anime?.airedTo),
   typeId: props.anime?.type?.id || null,
-  rating: props.anime?.rating ?? null,
   notes: props.anime?.notes || '',
   genreIds: props.anime?.genres?.map((genre) => genre.id) || [],
   authorIds: props.anime?.authors?.map((author) => author.id) || [],
@@ -262,7 +249,6 @@ async function onSubmit() {
       airedFrom: form.airedFrom || null,
       airedTo: form.airedTo || null,
       typeId: form.typeId || null,
-      rating: form.rating === '' ? null : form.rating,
       notes: form.notes,
       genreIds: form.genreIds,
       authorIds: form.authorIds,

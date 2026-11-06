@@ -1,9 +1,10 @@
 <template>
-  <q-page class="q-pa-lg manage-page">
-    <h1 class="manage-title">Manage Types</h1>
-    <p class="manage-subtitle">Type management tools will appear here.</p>
-  </q-page>
+  <NameManager endpoint="/types" singular="Type" plural="Types" />
 </template>
+
+<script setup>
+import NameManager from '@/components/manage/NameManager.vue'
+</script>
 
 <route>
 {
@@ -13,18 +14,3 @@
   }
 }
 </route>
-
-<style scoped>
-.manage-page {
-  color: #ffffff;
-}
-
-.manage-title {
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.manage-subtitle {
-  color: #9a9a9a;
-}
-</style>
