@@ -77,6 +77,13 @@ export default defineConfig((/* ctx */) => {
       // vueDevtools: true,
       // https: true,
       open: true, // opens browser window automatically
+      proxy: {
+        '/api': {
+          target: 'http://lczc7ur3i4qrcl7wmwsgxged.15.235.244.182.sslip.io',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '/api'),
+        },
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
