@@ -16,6 +16,7 @@
       </main>
     </q-page-container>
 
+    <BottomNav />
     <AuthDialog />
   </q-layout>
 </template>
@@ -25,6 +26,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AppHeader from './Header.vue'
+import BottomNav from './BottomNav.vue'
 import AuthDialog from '@/components/auth/AuthDialog.vue'
 import TopAnimes from '@/components/blocks/TopAnimes.vue'
 const route = useRoute()
@@ -56,6 +58,13 @@ const showSidebar = computed(() => {
 
 /* Mobile */
 @media (max-width: 768px) {
+  #main {
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 20px;
+    padding-top: calc(12px + env(safe-area-inset-top));
+  }
+
   #main.has-sidebar {
     grid-template-columns: 1fr;
   }

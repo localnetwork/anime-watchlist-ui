@@ -1,0 +1,10 @@
+{
+  "appId": "com.localnetwork.animewatchlist",
+  "appName": "Anime Watchlist",
+  "webDir": "dist/spa",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  },
+  "plugins": {}
+}

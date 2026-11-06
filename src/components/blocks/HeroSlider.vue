@@ -1,10 +1,12 @@
-<template>
+﻿<template>
   <section class="hero-slider">
     <q-carousel
       v-model="slide"
       animated
       infinite
       arrows
+      swipeable
+      autoplay
       transition-prev="slide-right"
       transition-next="slide-left"
       class="hero-carousel"
@@ -178,11 +180,21 @@ const formatDate = (date) => {
 }
 
 @media (max-width: 768px) {
-  .hero-carousel {
-    height: 460px;
+  .hero-slider {
+    margin-bottom: 20px;
   }
 
-  .hero-overlay {
+  .hero-carousel {
+    height: 320px;
+    border-radius: 8px;
+  }
+
+  .hero-carousel :deep(.q-carousel__prev-arrow),
+  .hero-carousel :deep(.q-carousel__next-arrow) {
+    display: none;
+  }
+
+.hero-overlay {
     background: linear-gradient(
       0deg,
       rgba(0, 0, 0, 0.95) 0%,
@@ -192,48 +204,23 @@ const formatDate = (date) => {
   }
 
   .hero-content {
-    padding: 30px 50px 55px;
+    padding: 16px 16px 40px;
   }
 
   .hero-title {
-    font-size: 34px;
+    margin-bottom: 8px;
+    font-size: 20px;
+    line-height: 1.3;
   }
 
   .hero-description {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.5;
   }
-}
 
-@media (max-width: 480px) {
-  .hero-carousel {
-    height: 430px;
-  }
-
-  .hero-content {
-    padding: 25px 45px 50px;
-  }
-
-  .hero-title {
-    font-size: 28px;
-  }
-
-  .hero-description {
-    -webkit-line-clamp: 2;
-  }
-
-  .hero-carousel :deep(.q-carousel__prev-arrow .q-btn),
-  .hero-carousel :deep(.q-carousel__next-arrow .q-btn) {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    min-height: 38px;
-    padding: 8px;
-  }
-
-  .hero-carousel :deep(.q-carousel__prev-arrow .q-icon),
-  .hero-carousel :deep(.q-carousel__next-arrow .q-icon) {
-    font-size: 22px;
+  .hero-airdate {
+    margin-top: 10px;
+    font-size: 11px;
   }
 }
 </style>

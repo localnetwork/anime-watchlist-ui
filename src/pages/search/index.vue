@@ -21,6 +21,16 @@
           </template>
         </q-input>
 
+        <q-btn
+          icon="tune"
+          label="Filters"
+          no-caps
+          unelevated
+          class="filter-toggle-btn mobile-only"
+          @click="drawerOpen = true"
+        />
+
+        <FilterPanel v-model="drawerOpen">
         <q-select
           v-model="query.genreId"
           :options="genreOptions"
@@ -79,6 +89,7 @@
           class="filter-apply-btn"
           @click="applyFilters"
         />
+        </FilterPanel>
       </div>
 
       <div v-if="loading" class="search-loading">
@@ -135,10 +146,12 @@
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '@/boot/axios'
+import FilterPanel from '@/components/_partials/FilterPanel.vue'
 
 const route = useRoute()
 const router = useRouter()
 
+const drawerOpen = ref(false)
 const loading = ref(false)
 const results = ref([])
 const meta = reactive({ totalPages: 1 })
@@ -214,6 +227,7 @@ async function fetchResults() {
 }
 
 function applyFilters() {
+  drawerOpen.value = false
   query.page = 1
   syncRouteQuery()
   fetchResults()
@@ -355,6 +369,37 @@ onMounted(async () => {
 @media (max-width: 992px) {
   .anime-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .search-page {
+    padding: 12px;
+  }
+
+  .search-title {
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .search-filters {
+    flex-wrap: nowrap;
+    margin-bottom: 20px;
+  }
+
+  .filter-search {
+    min-width: 0;
+  }
+
+  .filter-toggle-btn {
+    height: 40px;
+    background-color: #242424;
+    color: #b47fff;
+    border-radius: 5px;
+  }
+
+  .anime-grid {
+    gap: 12px;
   }
 }
 

@@ -12,6 +12,31 @@ body {
 .q-field--focused .q-field__label {
   color: #7c4dff !important;
 }
+html,
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .q-dialog__inner > .q-card:not(.account-sheet) {
+    max-width: 95vw !important;
+  }
+
+  .q-table__container {
+    overflow-x: auto;
+  }
+}
+
 @media (min-width: 1200px) {
   .container {
     max-width: 1440px;

@@ -636,13 +636,35 @@ onBeforeUnmount(() => {
 /* Mobile */
 
 @media (max-width: 768px) {
+  .app-header {
+    display: none;
+  }
+
+  .app-toggle {
+    display: none;
+  }
+
+  .header-left {
+    flex: 1;
+  }
+
   .search-wrapper {
-    width: 100%;
-    max-width: 300px;
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .header-right {
+    margin-left: 8px;
   }
 
   .app-logo {
-    margin-right: 15px;
+    margin-right: 10px;
+  }
+
+  .app-logo :deep(svg) {
+    max-width: 90px;
+    height: auto;
   }
 
   .sign-in-btn {

@@ -7,7 +7,7 @@ const TOKEN_COOKIE_DAYS = 7
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: Cookies.get(TOKEN_COOKIE) || null,
+    token: localStorage.getItem(TOKEN_COOKIE) || Cookies.get(TOKEN_COOKIE) || null,
     user: JSON.parse(localStorage.getItem('user') || 'null'),
   }),
 
@@ -29,6 +29,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = token
       this.user = user
       Cookies.set(TOKEN_COOKIE, token, { expires: TOKEN_COOKIE_DAYS, sameSite: 'Lax', path: '/' })
+      localStorage.setItem(TOKEN_COOKIE, token)
       localStorage.setItem('user', JSON.stringify(user))
     },
 
@@ -65,6 +66,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.user = null
       Cookies.remove(TOKEN_COOKIE, { path: '/' })
+      localStorage.removeItem(TOKEN_COOKIE)
       localStorage.removeItem('user')
     },
   },

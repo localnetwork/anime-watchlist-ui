@@ -33,6 +33,16 @@
         </template>
       </q-input>
 
+      <q-btn
+        icon="tune"
+        label="Filters"
+        no-caps
+        unelevated
+        class="filter-toggle-btn mobile-only"
+        @click="drawerOpen = true"
+      />
+
+      <FilterPanel v-model="drawerOpen">
       <q-select
         v-model="filters.airedStatus"
         :options="airedStatusOptions"
@@ -108,6 +118,7 @@
         class="clear-filters-btn"
         @click="clearFilters"
       />
+      </FilterPanel>
     </div>
 
     <div v-if="loading" class="manage-loading">
@@ -189,9 +200,11 @@ import { useQuasar } from 'quasar'
 import { api } from '@/boot/axios'
 import AnimeDialog from '@/components/anime/AnimeDialog.vue'
 import EpisodeManagerDialog from '@/components/anime/EpisodeManagerDialog.vue'
+import FilterPanel from '@/components/_partials/FilterPanel.vue'
 
 const $q = useQuasar()
 
+const drawerOpen = ref(false)
 const animeList = ref([])
 const loading = ref(false)
 const loadingMore = ref(false)
@@ -515,5 +528,51 @@ onMounted(() => {
   padding: 0 24px;
   height: 40px;
   border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .manage-page {
+    padding: 12px;
+  }
+
+  .manage-header {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+
+  .filter-bar {
+    flex-wrap: nowrap;
+    padding: 10px;
+  }
+
+  .filter-search {
+    min-width: 0;
+  }
+
+  .filter-toggle-btn {
+    height: 40px;
+    background-color: #242424;
+    color: #b47fff;
+    border-radius: 5px;
+  }
+
+  .anime-row {
+    gap: 12px;
+  }
+
+  .anime-row-body {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .anime-row-actions {
+    flex-wrap: wrap;
+  }
 }
 </style>
