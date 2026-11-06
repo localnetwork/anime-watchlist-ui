@@ -20,6 +20,7 @@
       <ProfileForm />
 
       <ChangePasswordDialog v-model="passwordDialogOpen" />
+      <ProfileTour ref="tour" />
     </div>
   </q-page>
 </template>
@@ -34,13 +35,23 @@
 </route>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import ProfileForm from '@/components/auth/ProfileForm.vue'
+import ProfileTour from '@/components/auth/ProfileTour.vue'
 import ChangePasswordDialog from '@/components/auth/ChangePasswordDialog.vue'
 import { useAuthStore } from '@/stores/auth-store'
 
 const authStore = useAuthStore()
 const passwordDialogOpen = ref(false)
+const tour = ref(null)
+
+onMounted(() => {
+  if (localStorage.getItem('profileTourPending')) {
+    localStorage.removeItem('profileTourPending')
+    // Give the form time to render before spotlighting its fields.
+    setTimeout(() => tour.value?.start(), 600)
+  }
+})
 </script>
 
 <style scoped>

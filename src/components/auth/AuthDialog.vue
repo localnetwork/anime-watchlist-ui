@@ -44,8 +44,14 @@ const isOpen = computed({
 
 function onSuccess() {
   const redirect = uiStore.authRedirect
+  const justRegistered = uiStore.authDialogMode === 'register'
   uiStore.closeAuthDialog()
-  if (redirect) router.push(redirect)
+  if (justRegistered) {
+    localStorage.setItem('profileTourPending', '1')
+    router.push('/profile/edit')
+  } else if (redirect) {
+    router.push(redirect)
+  }
 }
 </script>
 

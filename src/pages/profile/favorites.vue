@@ -129,6 +129,7 @@ onMounted(fetchFavorites)
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 4px;
+  line-height: 100%;
 }
 
 .favorites-subtitle {

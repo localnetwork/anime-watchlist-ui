@@ -45,6 +45,8 @@ export default defineConfig((/* ctx */) => {
       // publicPath: '/',
       // define: {},
       // defineEnv: {}
+      // Quasar CLI only exposes QCLI_-prefixed env vars by default.
+      env: { clientPrefix: 'VITE_' },
       // ignorePublicFolder: true,
       // minify: false,
       // distDir

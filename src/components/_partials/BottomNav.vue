@@ -11,13 +11,52 @@
       <q-route-tab name="home" to="/" icon="home" label="Home" exact />
       <q-route-tab name="search" to="/search" icon="search" label="Search" />
       <q-tab name="favorites" icon="favorite" label="Favorites" @click.prevent="onFavorites" />
-      <q-tab name="menu" :icon="authStore.isAuthenticated ? 'person' : 'login'" :label="authStore.isAuthenticated ? 'Account' : 'Sign In'" @click.prevent="onAccount" />
+      <q-tab name="menu" :icon="authStore.isAuthenticated ? 'menu' : 'login'" :label="authStore.isAuthenticated ? 'More' : 'Sign In'" @click.prevent="onAccount" />
     </q-tabs>
 
     <q-dialog v-model="sheetOpen" position="bottom">
       <q-card class="account-sheet">
         <div class="user-name">{{ authStore.user?.name || authStore.user?.email }}</div>
         <q-list>
+          <q-item
+            v-for="item in browseItems"
+            :key="item.label"
+            v-close-popup
+            clickable
+            :to="item.to"
+          >
+            <q-item-section avatar><q-icon :name="item.icon" /></q-item-section>
+            <q-item-section>{{ item.label }}</q-item-section>
+          </q-item>
+
+          <q-expansion-item icon="category" label="Genres" dark>
+            <q-item
+              v-for="genre in genres"
+              :key="genre.id"
+              v-close-popup
+              clickable
+              class="sub-item"
+              :to="{ path: '/search', query: { genreId: genre.id } }"
+            >
+              <q-item-section>{{ genre.name }}</q-item-section>
+            </q-item>
+          </q-expansion-item>
+
+          <q-expansion-item icon="movie" label="Types" dark>
+            <q-item
+              v-for="type in types"
+              :key="type.id"
+              v-close-popup
+              clickable
+              class="sub-item"
+              :to="{ path: '/search', query: { typeId: type.id } }"
+            >
+              <q-item-section>{{ type.name }}</q-item-section>
+            </q-item>
+          </q-expansion-item>
+
+          <q-separator dark />
+
           <q-item
             v-for="item in menuItems"
             :key="item.label"
@@ -43,12 +82,38 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth-store'
 import { useUiStore } from '@/stores/ui-store'
+import { api } from '@/boot/axios'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const uiStore = useUiStore()
 const sheetOpen = ref(false)
+const genres = ref([])
+const types = ref([])
+
+const browseItems = [
+  {
+    label: 'Upcoming',
+    icon: 'event',
+    to: { path: '/search', query: { airedStatus: 'NOT_YET_RELEASED' } },
+  },
+  {
+    label: 'Ongoing',
+    icon: 'live_tv',
+    to: { path: '/search', query: { airedStatus: 'AIRING' } },
+  },
+]
+
+async function loadMenuData() {
+  try {
+    const [genresRes, typesRes] = await Promise.all([api.get('/genres'), api.get('/types')])
+    genres.value = genresRes.data
+    types.value = typesRes.data
+  } catch {
+    // Menu stays usable without the lists.
+  }
+}
 
 const activeTab = computed(() => {
   if (route.path === '/') return 'home'
@@ -64,6 +129,8 @@ const menuItems = computed(() => {
   items.push({ label: 'Edit Profile', icon: 'manage_accounts', to: '/profile/edit' })
   if (authStore.hasPermission('anime.favorite.manage'))
     items.push({ label: 'My Favorites', icon: 'favorite', to: '/profile/favorites' })
+  if (authStore.hasPermission('anime.rating.manage'))
+    items.push({ label: 'My Ratings', icon: 'star_rate', to: '/profile/ratings' })
   if (authStore.hasPermission('genre.manage'))
     items.push({ label: 'Manage Genres', icon: 'category', to: '/manage/genres' })
   if (authStore.hasPermission('type.manage'))
@@ -89,6 +156,7 @@ function onAccount() {
     return
   }
   sheetOpen.value = true
+  loadMenuData()
 }
 
 function onLogout() {
@@ -115,6 +183,12 @@ function onLogout() {
   color: #d0d0d0;
   border-radius: 16px 16px 0 0;
   padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.sub-item {
+  padding-left: 72px;
 }
 
 .user-name {

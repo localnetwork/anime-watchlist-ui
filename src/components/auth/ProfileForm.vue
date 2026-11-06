@@ -1,6 +1,6 @@
 <template>
   <q-form class="q-gutter-md" @submit.prevent="onSubmit">
-    <div class="avatar-upload">
+    <div class="avatar-upload" data-tour="avatar">
       <q-avatar size="120px" class="avatar-preview">
         <img v-if="form.avatarUrl" :src="form.avatarUrl" alt="Avatar preview" />
         <q-icon v-else name="account_circle" size="120px" color="grey-6" />
@@ -26,9 +26,10 @@
       </div>
     </div>
 
-    <q-input v-model="form.name" label="Display name" dark filled class="profile-input" />
+    <q-input v-model="form.name" label="Display name" dark filled class="profile-input" data-tour="name" />
 
     <q-input
+      data-tour="username"
       v-model="form.username"
       label="Username"
       hint="Public profile URL: /u/username"
@@ -39,6 +40,7 @@
     />
 
     <q-input
+      data-tour="bio"
       v-model="form.bio"
       label="Bio"
       type="textarea"
@@ -49,7 +51,7 @@
       class="profile-input"
     />
 
-    <div class="social-links">
+    <div class="social-links" data-tour="social">
       <div class="social-links-header">
         <span class="social-links-title">Social links</span>
         <q-btn
@@ -101,6 +103,7 @@
     <div class="profile-actions">
       <q-btn
         type="submit"
+        data-tour="save"
         label="Save Changes"
         class="profile-submit"
         :loading="loading"
